@@ -33,6 +33,7 @@ namespace AIMLTGBot
         
        private readonly Stopwatch _stopWatch = new Stopwatch();
 
+        public StudentNetwork() { }
         public StudentNetwork(int[] structure, double lowerBound = -1, double upperBound = 1)
         {
             _charges = new double[structure.Length][];
@@ -59,10 +60,6 @@ namespace AIMLTGBot
                     for (int j = 0; j < columnsCount; j++)
                         _weights[n][i, j] = lowerBound + r.NextDouble() * (upperBound - lowerBound);
             }
-        }
-        public StudentNetwork(string filePath)
-        {
-            SetAttributes(filePath);
         }
 
         /// <summary>
@@ -228,19 +225,6 @@ namespace AIMLTGBot
             return _charges.Last().Take(_charges.Last().Length - 1).ToArray();
         }
 
-        public override NN GetAttributes()
-        {
-            NN grid = new NN(_weights, _charges, _errors, Speed);
-            return grid;
-        }
-
-        public override void SetAttributes(string filePath)
-        {
-            var nn = FileHelper.ReadFromBinaryFile<NN>(filePath);
-            _weights = nn._weights;
-            _charges = nn._charges;
-            _errors = nn._errors;
-            Speed = nn.Speed;
-        }
+  
     }
 }

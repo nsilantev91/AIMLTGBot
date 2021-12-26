@@ -9,8 +9,7 @@ using System.IO;
 namespace AIMLTGBot
 {
     [Serializable]
-    public class NN
-    {
+    public class NN     {
         /// <summary>
         /// Массив входных матриц весов
         /// </summary>

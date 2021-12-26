@@ -9,7 +9,7 @@ using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using System.Drawing;
-
+using Newtonsoft.Json;
 namespace AIMLTGBot
 {
     public class TelegramService : IDisposable
@@ -33,8 +33,10 @@ namespace AIMLTGBot
             cancellationToken: cts.Token);
             // Пробуем получить логин бота - тестируем соединение и токен
             Username = client.GetMeAsync().Result.Username;
-            Net = new StudentNetwork(@"../../NN.data");
-            
+            // Net = new StudentNetwork(@"../../NN.data");
+            var s = System.IO.File.ReadAllText(@"../../NN.txt");
+            Net = Newtonsoft.Json.JsonConvert.DeserializeObject<StudentNetwork>(s);
+
         }
 
         async Task HandleUpdateMessageAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -68,9 +70,12 @@ namespace AIMLTGBot
                 var orig = new Bitmap(imageStream);
                 
                 var processed = processor.ProcessImage(orig);
+                var s = new MemoryStream();
+                processed.Save(@"../../file.png");
                 var sample = CreateSample(processed);
                 Net.Predict(sample);
                 await client.SendTextMessageAsync(chatId: message.Chat.Id, sample.recognizedClass.ToString());
+
                 //set_result(sample);
                 /*imageStream.Seek(0, 0);
                 await client.SendPhotoAsync(
@@ -96,12 +101,12 @@ namespace AIMLTGBot
 
         public Sample CreateSample(Bitmap image, FigureType actualType = FigureType.Undef)
         {
-            var inputs = new double[1000];
+            var inputs = new double[200];
             var img = new Bitmap(image);
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 100; i++)
             {
                 inputs[i] = CountBlackPixels(GetBitmapColumn(img, i));
-                inputs[i + 500] = CountBlackPixels(GetBitmapRow(img, i));
+                inputs[i + 100] = CountBlackPixels(GetBitmapRow(img, i));
             }
 
             return new Sample(inputs, 5, actualType);

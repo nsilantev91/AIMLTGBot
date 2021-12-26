@@ -59,7 +59,5 @@ namespace AIMLTGBot
             TrainProgress?.Invoke(progress, error, time);
         }
 
-        public abstract NN GetAttributes();
-        public abstract void SetAttributes(string filePath);
     }
 }
