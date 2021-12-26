@@ -69,8 +69,8 @@ namespace AIMLTGBot
                 // Стрим помнит последнее место записи, мы же хотим теперь прочитать с самого начала
                 var orig = new Bitmap(imageStream);
                 
-                var processed = processor.ProcessImage(orig);
-                var s = new MemoryStream();
+                processor.ProcessImage(orig);
+                var processed = processor.processed;
                 processed.Save(@"../../file.png");
                 var sample = CreateSample(processed);
                 Net.Predict(sample);
