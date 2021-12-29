@@ -1,108 +1,332 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-
-<!-- ACQUAINTANCE -->
-
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <aiml>
+
+    <category>
+        <pattern>start</pattern>
+        <template>
+            <think>
+                <set name ="theme">null</set>
+                <set name ="subject">null</set>
+                <set name ="userName">null</set>
+                <set name ="hasName">false</set>
+                <set name ="play">1</set>
+                <set name ="pause">1</set>
+                <set name ="stop">1</set>
+                <set name ="forward">1</set>
+                <set name ="backward">1</set>
+            </think>
+            Бот запущен
+        </template>   
+    </category>
+
+    <category>
+        <pattern>Привет</pattern>
+        <template>
+            <condition name="hasName" value="true">
+               Привет!
+            </condition>
+            <condition name="hasName" value="false">Привет! Как тебя зовут?</condition>
+        </template>   
+    </category>
+
+    <category>
+        <pattern>Как меня зовут</pattern>
+        <template>
+            <condition name="hasName" value="true">
+                Тебя зовут <get name="userName"/>
+            </condition>
+            <condition name="hasName" value="false">
+                Я не знаю, как тебя зовут :(
+            </condition>
+        </template>
+    </category>
+
+     
+     <category>
+        <pattern>*</pattern>
+        <that>Привет Как тебя зовут?</that>
+        <template>
+            <srai>Меня зовут <star/></srai>
+        </template>   
+    </category>
+
+    <category>
+        <pattern>Меня зовут *</pattern>
+        <template>
+            <think>
+                <set name ="userName"><star/></set>
+                <set name ="hasName">true</set>
+            </think>
+            <random>
+                <li> Приятно познакомиться, <star/>! </li>
+                <li> Рад знакомству, <star/>! </li>
+                <li> Очень приятно, <star/>! </li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>Мое имя *</pattern>
+        <template>
+            <srai>Меня зовут <star/></srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>О чем мы говорим</pattern>
+        <template>
+            <condition name="theme" value="symbol">
+                  Мы говорим о символе <get name="subject" />
+            </condition>
+            <condition name="theme" value="null">
+                  Пока ни о чём, давай придумаем тему.
+            </condition>
+        </template>
+    </category>
+
+    <category>
+        <pattern>Расскажи про себя</pattern>
+        <template>
+            Я умею рассказывать про символы медиа-плеера: Play, Pause, Stop, Forward, Backward.
+        </template>   
+    </category>
+
+    <category>
+        <pattern>Расскажи еще</pattern>
+        <template>
+            <condition name="theme" value="symbol">
+                <srai>Расскажи про символ <get name="subject" /></srai>
+            </condition>
+            <condition name="theme" value="null">
+                Так мы ни о чём не говорили...
+            </condition>
+        </template>
+    </category>
+
+    <category>
+        <pattern>Расскажи о символе *</pattern>
+        <template>
+            <srai>Расскажи про символ <star/></srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>Расскажи про символ Play</pattern>
+        <template>
+
+            <condition name="play" value="4">
+                Увы, я больше ничего не знаю про символ Play((
+                <think>
+                    <set name="play">0</set>
+                </think>
+            </condition>
+
+            <condition name="play" value="3">
+                <think>
+                    <set name="play">4</set>
+                </think>
+                Чем больше кнопок Play подряд, тем быстрее играет музыка (обычно).
+            </condition>
+
+            <condition name="play" value="2">
+                <think>
+                    <set name="play">3</set>
+                </think>
+                Если верить Мудлу, то стрелочки у человека ассоциируются с движением.
+            </condition>
+
+            <condition name="play" value="1">
+                <think>
+                    <set name="play">2</set>
+                    <set name="subject">Play</set>
+                    <set name="theme">symbol</set>
+                </think>
+                Обычно этим символом помечают кнопочки, отвечающие за воспроизведение медиа.
+            </condition>
+
+            <condition name="play" value="0">
+                <think>
+                    <set name="play">1</set>
+                </think>
+            </condition>
+        </template>   
+    </category>
+
   <category>
-    <pattern>_ меня зовут *</pattern>
+    <pattern>Расскажи про символ Pause</pattern>
     <template>
-        <srai>меня зовут <star/></srai>
-    </template>
-  </category>
-  
-  <category>
-    <pattern>меня зовут *</pattern>
-    <template>
-      <random>
-        <li>Здравствуйте, <set name="user-name"><star /></set>!
-        </li>
-        <li>Добро пожаловать, <set name="user-name"><star /></set>!
-        </li>
-      </random>
+
+      <condition name="pause" value="4">
+        Увы, я больше ничего не знаю про символ Pause((
+        <think>
+          <set name="pause">0</set>
+        </think>
+      </condition>
+
+      <condition name="pause" value="3">
+        <think>
+          <set name="pause">4</set>
+        </think>
+        Не путать со Stop!
+      </condition>
+
+      <condition name="pause" value="2">
+        <think>
+          <set name="pause">3</set>
+        </think>
+        Если хочется потом продолжить слушать с места, на котором остановился, то Pause-это твой выбор.
+      </condition>
+
+      <condition name="pause" value="1">
+        <think>
+          <set name="pause">2</set>
+          <set name="subject">Pause</set>
+          <set name="theme">symbol</set>
+        </think>
+        Название весьма говорящее: ПРИостанавливает воспроизведение.
+      </condition>
+
+      <condition name="pause" value="0">
+        <think>
+          <set name="pause">1</set>
+        </think>
+      </condition>
     </template>
   </category>
 
   <category>
-    <pattern>кто ты</pattern>
+    <pattern>Расскажи про символ Stop</pattern>
     <template>
-      <random>
-        <li>Я заготовка бота, <get name="user-name" /></li>
-      </random>
-    </template>
-  </category>
-  
-  <category>
-    <pattern>РАССКАЖИ О СЕБЕ</pattern>
-    <template>
-      <srai>кто ты</srai>
+
+      <condition name="stop" value="4">
+        Увы, я больше ничего не знаю про символ Stop((
+        <think>
+          <set name="stop">0</set>
+        </think>
+      </condition>
+
+      <condition name="stop" value="3">
+        <think>
+          <set name="stop">4</set>
+        </think>
+        Не путать с Pause!
+      </condition>
+
+      <condition name="stop" value="2">
+        <think>
+          <set name="stop">3</set>
+        </think>
+        Злой брат-близнец Pause, после него воспроизведение начинается сначала.
+      </condition>
+
+      <condition name="stop" value="1">
+        <think>
+          <set name="stop">2</set>
+          <set name="subject">Stop</set>
+          <set name="theme">symbol</set>
+        </think>
+        Stop останавливает воспроизведение. И точка.
+      </condition>
+
+      <condition name="stop" value="0">
+        <think>
+          <set name="stop">1</set>
+        </think>
+      </condition>
     </template>
   </category>
 
   <category>
-    <pattern>Кря *</pattern>
+    <pattern>Расскажи про символ Forward</pattern>
     <template>
-      <srai>Кря</srai>
-    </template>
-  </category>
-  
-  <category>
-    <pattern>_ Кря *</pattern>
-    <template>
-      <srai>Кря</srai>
+
+      <condition name="forward" value="4">
+        Увы, я больше ничего не знаю про символ Forward((
+        <think>
+          <set name="forward">0</set>
+        </think>
+      </condition>
+
+      <condition name="forward" value="3">
+        <think>
+          <set name="forward">4</set>
+        </think>
+        Не перестарайся с ускорением медиа! Так и всю жизнь пропустишь.
+      </condition>
+
+      <condition name="forward" value="2">
+        <think>
+          <set name="forward">3</set>
+        </think>
+        От него прямо-таки веет скоростью.
+      </condition>
+
+      <condition name="forward" value="1">
+        <think>
+          <set name="forward">2</set>
+          <set name="subject">Forward</set>
+          <set name="theme">symbol</set>
+        </think>
+        Forward выглядит как два символа Play сразу
+      </condition>
+
+      <condition name="forward" value="0">
+        <think>
+          <set name="forward">1</set>
+        </think>
+      </condition>
     </template>
   </category>
 
   <category>
-    <pattern>_ Кря</pattern>
+    <pattern>Расскажи про символ Backward</pattern>
     <template>
-      <srai>Кря</srai>
+
+      <condition name="backward" value="4">
+        Увы, я больше ничего не знаю про символ Backward((
+        <think>
+          <set name="backward">0</set>
+        </think>
+      </condition>
+
+      <condition name="backward" value="3">
+        <think>
+          <set name="backward">4</set>
+        </think>
+        Ходят слухи, что Backward очень не любит своего куда более известного брата Forward.
+      </condition>
+
+      <condition name="backward" value="2">
+        <think>
+          <set name="backward">3</set>
+        </think>
+        Отвечает за возвращение к истокам (то бишь за перемотку в обратную сторону).
+      </condition>
+
+      <condition name="backward" value="1">
+        <think>
+          <set name="backward">2</set>
+          <set name="subject">Backward</set>
+          <set name="theme">symbol</set>
+        </think>
+        Два символа Play, но смотрят в обратную сторону.
+      </condition>
+
+      <condition name="backward" value="0">
+        <think>
+          <set name="backward">1</set>
+        </think>
+      </condition>
     </template>
   </category>
 
-  <category>
-    <pattern>Кря</pattern>
-    <template>
-      <random>
-        <li>Кря</li>
-        <li>Кря Кря</li>
-        <li>Кря Кря Кря</li>
-        <li>Кря!</li>
-        <li>Кря Кря!</li>
-        <li>Кря Кря Кря!</li>
-        <li>Кря?</li>
-        <li>Кря Кря?</li>
-        <li>Кря Кря Кря?</li>
-        <li>Кря, <get name="user-name" /></li>
-        <li>Кря Кря, <get name="user-name" /> </li>
-        <li>Кря Кря Кря, <get name="user-name" /> </li>
-        <li>Кря, <get name="user-name" />!</li>
-        <li>Кря Кря, <get name="user-name" />!</li>
-        <li>Кря Кря Кря, <get name="user-name" />!</li>
-        <li>Кря, <get name="user-name" />?</li>
-        <li>Кря Кря, <get name="user-name" />?</li>
-        <li>Кря Кря Кря, <get name="user-name" />?</li>
-      </random>
-    </template>
-  </category>
+	<category>
+		<pattern>*</pattern>
+		<template>
+			Я тебя не понимаю
+		</template>
+	</category>
 
-  <category>
-    <pattern>Что ты умеешь</pattern>
-    <template>
-      Волшебное ничего
-    </template>
-  </category>
-  
-  <category>
-    <pattern>Аудио</pattern>
-    <template>Жаль, я не умею слушать</template>
-  </category>
-  <category>
-    <pattern>Видео</pattern>
-    <template>Спасибо, но, кажется, у меня сломалась кнопка запуска</template>
-  </category>
-  
-  <category>
-    <pattern>*</pattern>
-    <template>Я такое не знаю, <get name="user-name"/></template>
-  </category>
+    
+
 </aiml>
